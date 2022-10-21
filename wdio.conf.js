@@ -2,7 +2,7 @@ exports.config = {
     wdi5: {
         screenshotPath: "webapp/test/__screenshots__",
         screenshotsDisabled: false, // [optional] {boolean}, default: false; if set to true, screenshots won't be taken and not written to file system
-        logLevel: "verbose", // [optional] error | verbose | silent, default: "error"
+        logLevel: "error", // [optional] error | verbose | silent, default: "error"
         url: "index.html", // [mandatory] {string} name of your bootstrap html file. If your server autoredirects to a 'domain:port/'-like root url, use empty string ''
         skipInjectUI5OnStart: false, // [optional] {boolean}, default: false; true when UI5 is not on the start page, you need to later call <wdioUI5service>.injectUI5() manually
         waitForUI5Timeout: 15000 // [optional] {number}, default: 15000; maximum waiting time in milliseconds while checking for UI5 availability
@@ -68,8 +68,8 @@ exports.config = {
                     process.argv.indexOf("--headless") > -1
                         ? ["--headless"]
                         : process.argv.indexOf("--debug") > -1
-                            ? ["window-size=1440,800", "--auto-open-devtools-for-tabs"]
-                            : ["window-size=1440,800"]
+                        ? ["window-size=1440,800", "--auto-open-devtools-for-tabs"]
+                        : ["window-size=1440,800"]
             },
             acceptInsecureCerts: true
             // If outputDir is provided WebdriverIO can capture driver session logs
@@ -109,7 +109,7 @@ exports.config = {
     // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
     // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
     // gets prepended directly.
-    baseUrl: "http://localhost:8080/index.html",
+    baseUrl: "http://localhost:8080",
     //
     // Default timeout for all waitFor* commands.
     waitforTimeout: 10000,
