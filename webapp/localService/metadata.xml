@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="ZA_TEST_GW_JK_SRV" xml:lang="nl" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <Annotation Term="Core.SchemaVersion" String="1.0.0" xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
+            <EntityType Name="vlucht" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Carrid"/>
+                    <PropertyRef Name="Connid"/>
+                    <PropertyRef Name="Fldate"/>
+                </Key>
+                <Property Name="Perc_occ" Type="Edm.Float" Nullable="false" sap:unicode="false"/>
+                <Property Name="Carrid" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false"/>
+                <Property Name="Connid" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false"/>
+                <Property Name="Fldate" Type="Edm.String" Nullable="false" sap:unicode="false"/>
+                <Property Name="Price" Type="Edm.Decimal" Nullable="false" Precision="17" Scale="3" sap:unicode="false"/>
+                <Property Name="Currency" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false"/>
+                <Property Name="Planetype" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false"/>
+                <NavigationProperty Name="bookingSet" Relationship="ZA_TEST_GW_JK_SRV.vlucht_booking" FromRole="FromRole_vlucht_booking" ToRole="ToRole_vlucht_booking"/>
+                <NavigationProperty Name="vliegtuigSet" Relationship="ZA_TEST_GW_JK_SRV.vliegtuig_vlucht" FromRole="ToRole_vliegtuig_vlucht" ToRole="FromRole_vliegtuig_vlucht"/>
+            </EntityType>
+            <EntityType Name="booking" sap:label="booking" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Carrid"/>
+                    <PropertyRef Name="Connid"/>
+                    <PropertyRef Name="Fldate"/>
+                    <PropertyRef Name="Bookid"/>
+                </Key>
+                <Property Name="Carrid" Type="Edm.String" Nullable="false" sap:unicode="false"/>
+                <Property Name="Connid" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false"/>
+                <Property Name="Fldate" Type="Edm.String" Nullable="false" sap:unicode="false"/>
+                <Property Name="Bookid" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false"/>
+                <Property Name="Customid" Type="Edm.String" MaxLength="8" sap:unicode="false"/>
+                <Property Name="Passname" Type="Edm.String" MaxLength="25" sap:unicode="false"/>
+                <NavigationProperty Name="vluchtSet" Relationship="ZA_TEST_GW_JK_SRV.vlucht_booking" FromRole="ToRole_vlucht_booking" ToRole="FromRole_vlucht_booking"/>
+            </EntityType>
+            <EntityType Name="vliegtuig" m:HasStream="true" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Planetype"/>
+                </Key>
+                <Property Name="Planetype" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="TEST Annotations in het NL"/>
+                <Property Name="Producer" Type="Edm.String" MaxLength="5" sap:unicode="false"/>
+                <Property Name="PictureURI" Type="Edm.String" Nullable="false" MaxLength="255" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PictureMIME" Type="Edm.String" Nullable="false" MaxLength="128" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="vluchtSet" Relationship="ZA_TEST_GW_JK_SRV.vliegtuig_vlucht" FromRole="FromRole_vliegtuig_vlucht" ToRole="ToRole_vliegtuig_vlucht"/>
+            </EntityType>
+            <ComplexType Name="LongTxt">
+                <Property Name="Key" Type="Edm.Binary" Nullable="false" sap:label="NodeID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ParentKey" Type="Edm.Binary" Nullable="false" sap:label="NodeID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="RootKey" Type="Edm.Binary" Nullable="false" sap:label="NodeID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </ComplexType>
+            <Association Name="vliegtuig_vlucht" sap:content-version="1">
+                <End Type="ZA_TEST_GW_JK_SRV.vliegtuig" Multiplicity="1" Role="FromRole_vliegtuig_vlucht"/>
+                <End Type="ZA_TEST_GW_JK_SRV.vlucht" Multiplicity="*" Role="ToRole_vliegtuig_vlucht"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_vliegtuig_vlucht">
+                        <PropertyRef Name="Planetype"/>
+                    </Principal>
+                    <Dependent Role="ToRole_vliegtuig_vlucht">
+                        <PropertyRef Name="Planetype"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="vlucht_booking" sap:content-version="1">
+                <End Type="ZA_TEST_GW_JK_SRV.vlucht" Multiplicity="1" Role="FromRole_vlucht_booking"/>
+                <End Type="ZA_TEST_GW_JK_SRV.booking" Multiplicity="*" Role="ToRole_vlucht_booking"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_vlucht_booking">
+                        <PropertyRef Name="Fldate"/>
+                        <PropertyRef Name="Connid"/>
+                        <PropertyRef Name="Carrid"/>
+                    </Principal>
+                    <Dependent Role="ToRole_vlucht_booking">
+                        <PropertyRef Name="Fldate"/>
+                        <PropertyRef Name="Connid"/>
+                        <PropertyRef Name="Carrid"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <EntityContainer Name="ZA_TEST_GW_JK_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="vluchtSet" EntityType="ZA_TEST_GW_JK_SRV.vlucht" sap:searchable="true" sap:content-version="1"/>
+                <EntitySet Name="bookingSet" EntityType="ZA_TEST_GW_JK_SRV.booking" sap:searchable="true" sap:content-version="1"/>
+                <EntitySet Name="vliegtuigSet" EntityType="ZA_TEST_GW_JK_SRV.vliegtuig" sap:searchable="true" sap:content-version="1"/>
+                <AssociationSet Name="vlucht_bookingSet" Association="ZA_TEST_GW_JK_SRV.vlucht_booking" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="vluchtSet" Role="FromRole_vlucht_booking"/>
+                    <End EntitySet="bookingSet" Role="ToRole_vlucht_booking"/>
+                </AssociationSet>
+                <AssociationSet Name="vliegtuig_vluchtSet" Association="ZA_TEST_GW_JK_SRV.vliegtuig_vlucht" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="vliegtuigSet" Role="FromRole_vliegtuig_vlucht"/>
+                    <End EntitySet="vluchtSet" Role="ToRole_vliegtuig_vlucht"/>
+                </AssociationSet>
+                <FunctionImport Name="MinBookedFlights" ReturnType="Collection(ZA_TEST_GW_JK_SRV.vlucht)" EntitySet="vluchtSet" m:HttpMethod="GET" sap:action-for="ZA_TEST_GW_JK_SRV.vlucht">
+                    <Parameter Name="airport" Type="Edm.String" Mode="In" MaxLength="30"/>
+                    <Parameter Name="country" Type="Edm.String" Mode="In"/>
+                    <Parameter Name="min_occupied" Type="Edm.Float" Mode="In"/>
+                </FunctionImport>
+            </EntityContainer>
+            <atom:link rel="self" href="https://WEBWSD.APS.KULEUVEN.BE:443/sap/opu/odata/sap/ZA_TEST_GW_JK_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="https://WEBWSD.APS.KULEUVEN.BE:443/sap/opu/odata/sap/ZA_TEST_GW_JK_SRV;v=2/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
